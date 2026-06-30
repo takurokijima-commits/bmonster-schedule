@@ -6,23 +6,19 @@
 <title>b-monster 4スタジオ早見表</title>
 <style>
 body{margin:0;background:#f2f2f2;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;color:#111}
-header{position:sticky;top:0;background:#fff;z-index:20;border-bottom:1px solid #ddd}
-.top{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 14px}
-.logo{font-weight:900;line-height:1;font-size:17px}.logo small{font-size:8px}
-.title{font-weight:900;font-size:20px}.icons{font-size:22px;display:flex;gap:12px}
-.today{text-align:center;font-weight:900;font-size:26px;padding:6px 0 8px}
+header{background:#fff;border-bottom:1px solid #ddd}
+.top{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 14px}
+.logo{font-weight:900;line-height:1;font-size:19px}.logo small{font-size:10px}
+.title{font-weight:900;font-size:22px}.icons{font-size:25px}
+.today{text-align:center;font-weight:900;font-size:28px;padding:0 0 8px}
 .datebar{display:flex;gap:8px;overflow:auto;padding:10px 12px;background:#fff}
-.datebtn{border:1px solid #ddd;background:#fff;border-radius:8px;padding:12px 20px;white-space:nowrap;font-size:18px}
+.datebtn{border:1px solid #ddd;background:#fff;border-radius:9px;padding:12px 22px;white-space:nowrap;font-size:18px}
 .datebtn.active{background:#e95524;color:#fff;border-color:#e95524}
-.search{display:flex;gap:6px;padding:8px 12px;background:#fff}
-input{width:100%;box-sizing:border-box;border:1px solid #ddd;border-radius:8px;padding:10px;font-size:16px}
-.search button{background:#222;color:#fff;border:0;border-radius:8px;padding:0 16px;font-weight:700}
 .note{padding:10px 12px;font-size:13px;color:#666;background:#fff;border-top:1px solid #eee}
 .wrap{overflow:auto}
 .studioHead{display:grid;grid-template-columns:64px repeat(4,165px);min-width:724px}
 .corner{background:#eee}
 .studio{padding:14px 4px;text-align:center;color:#fff;font-weight:900;font-size:15px;letter-spacing:.5px}
-.studio small{display:block;font-size:11px;margin-top:5px}
 .ginza{background:#2b2b2b}.omote{background:#777}.shinjuku{background:#54b8ee}.ike{background:#e76682}
 .table{display:grid;grid-template-columns:64px repeat(4,165px);min-width:724px}
 .time{background:#fff;border-right:1px solid #ddd;border-bottom:1px solid #ddd;text-align:center;font-weight:900;font-size:20px;padding-top:45px}
@@ -34,39 +30,37 @@ input{width:100%;box-sizing:border-box;border:1px solid #ddd;border-radius:8px;p
 .difficulty{font-size:14px;border-top:1px solid #eee;padding-top:7px}
 .badge{display:inline-block;font-size:12px;color:#fff;border-radius:3px;padding:2px 6px;margin-left:4px;background:#777}
 .full{background:#555}.event{background:#e95524}.lite{background:#77aeca;color:#fff;padding:5px 9px;border-radius:2px}
-.empty{opacity:.25;display:flex;align-items:center;justify-content:center}
+.empty{opacity:.22;display:flex;align-items:center;justify-content:center}
 </style>
 </head>
 <body>
 <header>
   <div class="top">
-    <div class="logo">b-monster<br><small>BOXING FITNESS STUDIO</small></div>
+    <div class="logo">b-monster<br><small>FITNESS STUDIO</small></div>
     <div class="title">4スタジオ早見表</div>
-    <div class="icons">⌕ ☆ ☰</div>
+    <div class="icons">☰</div>
   </div>
   <div class="today" id="today"></div>
   <div class="datebar" id="datebar"></div>
-  <div class="search">
-    <input id="q" placeholder="パフォーマー・プログラム検索 例：SALLY / MIX1">
-    <button onclick="render()">検索</button>
-  </div>
-  <div class="note">v2デモ：カードをタップすると公式予約ページを開きます。</div>
+  <div class="note">※カードをタップすると公式予約ページを開きます。現在はデモ版です。</div>
 </header>
 
 <div class="wrap">
   <div class="studioHead">
     <div class="corner"></div>
-    <div class="studio ginza">★ GINZA<small>営業時間 6:30〜22:45</small></div>
-    <div class="studio omote">★ OMOTESANDO<small>営業時間 6:30〜22:45</small></div>
-    <div class="studio shinjuku">★ SHINJUKU<small>営業時間 6:30〜22:45</small></div>
-    <div class="studio ike">★ IKEBUKURO<small>営業時間 6:30〜22:45</small></div>
+    <div class="studio ginza">GINZA</div>
+    <div class="studio omote">OMOTESANDO</div>
+    <div class="studio shinjuku">SHINJUKU</div>
+    <div class="studio ike">IKEBUKURO</div>
   </div>
   <main class="table" id="table"></main>
 </div>
 
 <script>
 const studios=["GINZA","OMOTESANDO","SHINJUKU","IKEBUKURO"];
+
 const dates=[
+ ["6/30（火）","2026/6/30（火）"],
  ["7/1（水）","2026/7/1（水）"],
  ["7/2（木）","2026/7/2（木）"],
  ["7/3（金）","2026/7/3（金）"],
@@ -74,38 +68,93 @@ const dates=[
  ["7/5（日）","2026/7/5（日）"],
  ["7/6（月）","2026/7/6（月）"]
 ];
+
 let currentDate="7/1（水）";
 
-const base=[
-["6:30","7:25","ACE","EDM1",2,""],
-["6:50","7:45","ASAMI","MIX1",3,"FULL"],
-["8:10","9:05","SALLY","POPS0",1,""],
-["9:30","10:25","RR!","Gryffin",2,""],
-["10:50","11:45","Chad","ROCK1",2,""],
-["12:10","13:05","SALLY","Lite Program",0,"LITE"],
-["13:30","14:25","RIO","MIX3",3,""],
-["14:50","15:45","ACE","MIX2",3,""],
-["16:10","17:05","SALLY","EUROPE",2,"EVENT"],
-["17:30","18:25","JELLENA","EDM0",2,""]
-];
+const lessons=[
+["6/30（火）","6:30","7:25","GINZA","Chad","EDM0",2,""],
+["6/30（火）","6:30","7:25","OMOTESANDO","ASAMI","MIX1",3,"FULL"],
+["6/30（火）","6:30","7:25","SHINJUKU","ACE","EDM0",1,""],
+["6/30（火）","6:30","7:25","IKEBUKURO","ZERO","EDM1",2,""],
+["6/30（火）","8:10","9:05","GINZA","ULU","K-HIPHOP",2,""],
+["6/30（火）","8:10","9:05","OMOTESANDO","SALLY","POPS0",1,""],
+["6/30（火）","8:10","9:05","SHINJUKU","JOANA","LATIN2",3,""],
+["6/30（火）","8:10","9:05","IKEBUKURO","RIO","MIX2",2,""],
 
-const names={
-GINZA:["ASAMI","SALLY","RR!","ULU","ACE","Chad"],
-OMOTESANDO:["ACE","SALLY","RIO","ASAMI","LEON"],
-SHINJUKU:["JELLENA","ACE","YUUHI","Kirara","RR!"],
-IKEBUKURO:["JOANA","RIO","KAORI","ULU","SALLY"]
-};
+["7/1（水）","6:30","7:25","GINZA","ACE","EDM1",2,""],
+["7/1（水）","6:30","7:25","OMOTESANDO","RYU","K-POP1",2,""],
+["7/1（水）","6:30","7:25","SHINJUKU","Chad","MIX1",1,""],
+["7/1（水）","6:30","7:25","IKEBUKURO","ZERO","EDM1",2,""],
+["7/1（水）","6:50","7:45","GINZA","ASAMI","MIX1",3,"FULL"],
+["7/1（水）","6:50","7:45","OMOTESANDO","ACE","EDM0",1,""],
+["7/1（水）","6:50","7:45","SHINJUKU","JELLENA","K-POP3",2,""],
+["7/1（水）","6:50","7:45","IKEBUKURO","Kirara","MIX2",1,""],
+["7/1（水）","8:10","9:05","GINZA","SALLY","POPS0",1,""],
+["7/1（水）","8:10","9:05","OMOTESANDO","SALLY","POPS0",1,""],
+["7/1（水）","8:10","9:05","SHINJUKU","JELLENA","K-POP3",2,""],
+["7/1（水）","8:10","9:05","IKEBUKURO","JOANA","LATIN2",3,""],
+["7/1（水）","9:30","10:25","GINZA","RR!","Gryffin",2,""],
+["7/1（水）","9:30","10:25","OMOTESANDO","RIO","MIX3",3,""],
+["7/1（水）","9:30","10:25","SHINJUKU","SALLY","MIX1",2,""],
+["7/1（水）","9:30","10:25","IKEBUKURO","RIO","ASIA",2,"EVENT"],
+["7/1（水）","10:50","11:45","GINZA","Chad","ROCK1",2,""],
+["7/1（水）","10:50","11:45","OMOTESANDO","ASAMI","EDM1",3,""],
+["7/1（水）","10:50","11:45","SHINJUKU","ACE","MIX1",2,""],
+["7/1（水）","10:50","11:45","IKEBUKURO","JELLENA","K-POP1",2,""],
+["7/1（水）","12:10","13:05","GINZA","ULU","HIPHOP0",1,""],
+["7/1（水）","12:10","13:05","OMOTESANDO","SALLY","Lite Program",0,"LITE"],
+["7/1（水）","12:10","13:05","SHINJUKU","JELLENA","K-POP1",1,""],
+["7/1（水）","12:10","13:05","IKEBUKURO","KAORI","MIX1",1,""],
+["7/1（水）","13:30","14:25","GINZA","SALLY","POPS0",1,""],
+["7/1（水）","13:30","14:25","OMOTESANDO","RIO","MIX3",3,""],
+["7/1（水）","13:30","14:25","SHINJUKU","RR!","Gryffin",2,""],
+["7/1（水）","13:30","14:25","IKEBUKURO","ULU","EDM1",2,""],
 
-const lessons=[];
-dates.forEach((d,di)=>{
-  studios.forEach((s,si)=>{
-    base.forEach((b,i)=>{
-      const performer=names[s][(i+di+si)%names[s].length];
-      const program=b[3]==="Lite Program"?"Lite Program":(["MIX1","MIX2","MIX3","EDM0","EDM1","POPS0","K-POP1","LATIN2","EUROPE"][(i+di+si)%9]);
-      lessons.push({date:d[0],start:b[0],end:b[1],studio:s,performer,program,difficulty:b[4],status:b[5]});
-    });
-  });
-});
+["7/2（木）","6:50","7:45","GINZA","ACE","EDM0",1,""],
+["7/2（木）","6:50","7:45","OMOTESANDO","JELLENA","K-POP3",2,""],
+["7/2（木）","6:50","7:45","SHINJUKU","SALLY","MIX1",2,""],
+["7/2（木）","6:50","7:45","IKEBUKURO","RIO","ASIA",2,""],
+["7/2（木）","8:10","9:05","GINZA","JELLENA","K-POP3",2,""],
+["7/2（木）","8:10","9:05","OMOTESANDO","SALLY","POPS0",1,""],
+["7/2（木）","8:10","9:05","SHINJUKU","ACE","MIX1",2,""],
+["7/2（木）","8:10","9:05","IKEBUKURO","JOANA","LATIN2",3,""],
+["7/2（木）","10:50","11:45","GINZA","ACE","MIX1",2,""],
+["7/2（木）","10:50","11:45","OMOTESANDO","ASAMI","EDM1",3,""],
+["7/2（木）","10:50","11:45","SHINJUKU","YUUHI","MIX2",3,""],
+["7/2（木）","10:50","11:45","IKEBUKURO","SALLY","EUROPE",2,"EVENT"],
+
+["7/3（金）","8:10","9:05","GINZA","JOANA","LATIN2",3,""],
+["7/3（金）","8:10","9:05","OMOTESANDO","RIO","MIX3",3,""],
+["7/3（金）","8:10","9:05","SHINJUKU","SALLY","POPS0",1,""],
+["7/3（金）","8:10","9:05","IKEBUKURO","Kirara","MIX2",1,""],
+["7/3（金）","12:10","13:05","GINZA","KAORI","MIX1",1,""],
+["7/3（金）","12:10","13:05","OMOTESANDO","ACE","MIX2",3,""],
+["7/3（金）","12:10","13:05","SHINJUKU","JELLENA","K-POP1",1,""],
+["7/3（金）","12:10","13:05","IKEBUKURO","RIO","IDOL3",3,""],
+
+["7/4（土）","12:10","13:05","GINZA","SALLY","MIX1",2,""],
+["7/4（土）","12:10","13:05","OMOTESANDO","KAORI","MIX1",1,""],
+["7/4（土）","12:10","13:05","SHINJUKU","RR!","Gryffin",2,""],
+["7/4（土）","12:10","13:05","IKEBUKURO","RIO","IDOL3",3,""],
+["7/4（土）","13:30","14:25","GINZA","SALLY","POPS0",1,""],
+["7/4（土）","13:30","14:25","OMOTESANDO","RIO","MIX3",3,""],
+["7/4（土）","13:30","14:25","SHINJUKU","RR!","Gryffin",2,""],
+["7/4（土）","13:30","14:25","IKEBUKURO","ULU","EDM1",2,""],
+
+["7/5（日）","12:10","13:05","GINZA","RIO","EDM1",3,""],
+["7/5（日）","12:10","13:05","OMOTESANDO","SALLY","MIX1",2,""],
+["7/5（日）","12:10","13:05","SHINJUKU","ACE","EDM0",1,""],
+["7/5（日）","12:10","13:05","IKEBUKURO","RIO","IDOL3",3,""],
+["7/5（日）","16:10","17:05","GINZA","RR!","Mobility1",2,""],
+["7/5（日）","16:10","17:05","OMOTESANDO","ASAMI","MIX1",2,""],
+["7/5（日）","16:10","17:05","SHINJUKU","Kirara","MIX4",2,""],
+["7/5（日）","16:10","17:05","IKEBUKURO","SALLY","EUROPE",2,"EVENT"],
+
+["7/6（月）","6:50","7:45","GINZA","ACE","EDM0",1,""],
+["7/6（月）","6:50","7:45","OMOTESANDO","ASAMI","MIX1",2,""],
+["7/6（月）","6:50","7:45","SHINJUKU","JELLENA","K-POP3",2,""],
+["7/6（月）","6:50","7:45","IKEBUKURO","JOANA","LATIN2",3,""]
+].map(x=>({date:x[0],start:x[1],end:x[2],studio:x[3],performer:x[4],program:x[5],difficulty:x[6],status:x[7]}));
 
 function stars(n){return n===0?"🔰":"★".repeat(n)+"☆".repeat(5-n)}
 function bookingUrl(l){
@@ -124,13 +173,12 @@ function renderDates(){
   const b=document.createElement("button");
   b.className="datebtn"+(d[0]===currentDate?" active":"");
   b.innerHTML=d[0].replace("（","<br>（");
-  b.onclick=()=>{currentDate=d[0];renderDates();render()};
+  b.onclick=()=>{currentDate=d[0];renderDates();render();window.scrollTo(0,0)};
   bar.appendChild(b);
  });
 }
 function render(){
- const q=document.getElementById("q").value.toLowerCase();
- const data=lessons.filter(l=>l.date===currentDate).filter(l=>(l.performer+l.program+l.studio).toLowerCase().includes(q));
+ const data=lessons.filter(l=>l.date===currentDate);
  const times=[...new Set(data.map(l=>l.start))].sort();
  const table=document.getElementById("table");table.innerHTML="";
  times.forEach(t=>{
@@ -151,7 +199,6 @@ function render(){
   });
  });
 }
-document.getElementById("q").addEventListener("input",render);
 renderDates();render();
 </script>
 </body>
