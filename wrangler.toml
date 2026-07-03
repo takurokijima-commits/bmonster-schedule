@@ -1,7 +1,7 @@
-name = "bmonster-schedule2"
+name = "bmonster-schedule-final"
 main = "worker.js"
 compatibility_date = "2026-07-03"
 
 [assets]
-directory = "./public"
+directory = "."
 binding = "ASSETS"
