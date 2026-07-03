@@ -65,7 +65,7 @@ let dates=[];
 let currentDate="";
 
 function proxy(url){
-  return "https://api.allorigins.win/raw?url="+encodeURIComponent(url);
+  return "/api/proxy?url="+encodeURIComponent(url);
 }
 
 function cleanLines(text){
@@ -221,7 +221,7 @@ async function load(){
     document.getElementById("status").textContent="公式スケジュール取得完了";
   }catch(e){
     console.error(e);
-    document.getElementById("status").textContent="取得に失敗しました。更新するか、CORS制限の可能性があります。";
+    document.getElementById("status").textContent="取得に失敗しました。少し時間を置いて更新してください。";
   }
 }
 
